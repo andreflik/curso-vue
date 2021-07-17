@@ -6,6 +6,11 @@
     <ul>
         <li v-for="(cor, i) in cores">{{cor}} - {{i + 1}}</li>
     </ul>
+    <hr>
+    <template v-for="(cor, i) in cores">
+        <h1>{{cor}}</h1>
+        <p>{{i}}</p>
+    </template>
     
 </div>
 
@@ -26,5 +31,8 @@
 <style>
     ul {
         list-style: none;
+    }
+    h1, p {
+        display: inline;
     }
 </style>
