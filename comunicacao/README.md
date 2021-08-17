@@ -1,11 +1,12 @@
 # comunicacao
 
-## Project setup
+## Iniciando Projeto
 ```
 npm install
 ```
+Irá instalar o node_modules
 
-### Compiles and hot-reloads for development
+### Iniciar o server via npm
 ```
 npm run serve
 ```
