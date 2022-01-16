@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import frurasMixin from './frutasMixin.js'
+import Frutas from './Frutas.vue'
 export default {
 	directives: {
 		quando: {
