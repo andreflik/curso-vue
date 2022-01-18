@@ -1,26 +1,35 @@
 <template>
 	<div id="app" class="container">
 		<h1>HTTP com Axios</h1>
+		<b-alert show desmissible v-for="mensagem in mensagens" :key="mensagem.texto" 
+		variant="mensagem.tipo">{{mensagem.texto}}</b-alert>
 		<b-card>
+
 			<b-form-group label="Nome:">
 				<b-form-input type="text" size="lg" v-model="usuario.nome"
 				placeholder="Informe o Nome"></b-form-input>
 			</b-form-group>
+
 			<b-form-group label="Email:">
 				<b-form-input type="email" size="lg" v-model="usuario.email"
 				placeholder="Informe o Email"></b-form-input>
 			</b-form-group>
+
 			<hr>
+
 			<b-button @click.prevent="salvar" variant="primary">Salvar</b-button>
-			<b-button @click.prevent="obterUsuarios" variant="success"
-			class="ml-2">Obter Usuários</b-button>
+			<b-button @click.prevent="obterUsuarios" variant="success" class="ml-2">Obter Usuários</b-button>
 		</b-card>
+		
 		<hr>
+
 		<b-list-group>
 			<b-list-group-item v-for="(usuario, id) in usuarios"
 			:key="id"><strong>Nome: </strong>{{usuario.nome}}<br>
 			<strong>E-mail: </strong>{{usuario.email}}<br>
 			<strong>ID: </strong> {{id}}
+			<b-button variant="warning" @click="carregar(id)">Carregar</b-button>
+			<b-button variant="danger" @click="excluir(id)" class="ml-2">Excluir</b-button>
 			</b-list-group-item>
 		</b-list-group>
 	</div>
@@ -33,9 +42,9 @@ export default {
 
 	data() {
 		return {
-			usuarios: [
-
-			],
+			mensagens: [],
+			usuarios: [],
+			// id: null,
 			usuario: {
 				nome: '',
 				email: ''
@@ -43,17 +52,43 @@ export default {
 		}
 	},
 	methods: {
+		limpar() {
+			this.usuario.nome = ''
+			this.usuario.email = ''
+			this.id = null
+			this.mensagens = []
+		},
+		carregar(id) {
+			this.id = id
+			this.usuario = {...this.usuarios[id]}
+		},
+		excluir(id) {
+			this.$http.delete(`/usuarios/${id}.json`)
+				.then(() => this.limpar())
+				.catch(_ => {
+					this.mensagens.push({
+						texto: 'Problema para excluir !',
+						tipo: 'danger'
+					})
+				})
+		},
 		salvar() {
-			this.$http.post('usuarios.json', this.usuario)
-				.then(resp => {
-					this.usuario.nome = ''
-					this.usuario.email = ''
+			const metodo = this.id ? 'patch' : 'post'
+			const finalUrl = this.id ? `/${this.id}.json` : '.json'
+			this.$http[metodo](`/usuarios${finalUrl}`, this.usuario)
+				.then(_ => {
+					this.limpar()
+					this.mensagens.push({
+						texto: 'Operação realizada com sucesso !',
+						tipo: "success"
+					})
 				})
 		},
 		obterUsuarios() {
 			this.$http.get('usuarios.json').then(res => {
 				this.usuarios = res.data
 			})
+		}
 		}
 	}
 	// created() {
@@ -63,7 +98,7 @@ export default {
 
 	// 	}).then(res => console.log(res))
 	// }
-}
+
 </script>
 
 <style>
