@@ -8,8 +8,9 @@
 
 <script>
 import Menu from './components/template/Menu'
+
 export default {
-	components: {Menu},
+	components: { Menu },
 }
 </script>
 
