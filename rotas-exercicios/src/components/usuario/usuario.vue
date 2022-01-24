@@ -2,18 +2,14 @@
   <div class="usuario">
       <h2>Usuário</h2>
       <hr>
-      <p><strong> Código: </strong> {{ id }}</p>
+      <router-view />
       <button sucesso @click="irParaInicio">Voltar</button>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      id: this.$router.params.id
-    }
-  },
+  
   methods: {
     irParaInicio() {
       // this.$router.push('/')
