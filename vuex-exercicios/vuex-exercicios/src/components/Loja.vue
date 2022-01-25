@@ -11,16 +11,31 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 
 export default {
     data() {
         return {
-            sequencia: 1,
-            quantidade: 1,
-            preco: 9.99,
+            sequencia: 1
+            
+        }
+    },
+    computed: {
+        // eslint-disable-next-line vue/no-dupe-keys
+        quantidade() {
+            return this.$store.state.quantidade
+        },
+        // eslint-disable-next-line vue/no-dupe-keys
+        preco() {
+            return this.$store.state.preco
         }
     },
     methods: {
+        ...mapActions(['adicionarProduto']),
+        adicionarProduto(produto) {
+            this.$store.dispatch('adicionarProduto', produto)
+        },
+
         adicionar() {
             const produto = {
                 id: this.sequencia,
@@ -29,8 +44,10 @@ export default {
                 preco: this.preco
             }
             this.sequencia++
-            // eslint-disable-next-line
-            console.log(produto)
+            // this.$store.state.produtos.push(produto)
+            // this.$store.commit('adicionarProduto', produto)
+            // this.adicionarProduto(produto)
+            this.$store.dispatch('adicionarProduto', produto)
         }
     }
 }
